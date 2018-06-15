@@ -31,10 +31,11 @@
   },
   "dependencies": {
     "expo": "^25.0.0",
-    "react": "16.2.0",
-    "react-native": "0.52.0",
     "expo-web": "^0.0.12",
+    "firebase": "^5.0.4",
+    "react": "16.2.0",
     "react-dom": "16.0.0",
+    "react-native": "0.52.0",
     "react-native-web": "^0.4.0",
     "webpack": "^3.11.0",
     "webpack-dev-server": "2.9.4"
