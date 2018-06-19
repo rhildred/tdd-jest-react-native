@@ -19,9 +19,22 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { todo: '' };
+    this.getFromFirebase();
+  }
+
+  getFromFirebase() {
     fetch("https://rnhprog81102018.firebaseio.com/tasks.json")
     .then((oData) =>{
-      oData.json().then((data) => this.oTodos = data);
+      oData.json().then((data) => {
+        if(data){
+          this.oTodos = data;
+
+        }
+        this.setState({ todo: "" });
+      }).catch((err) =>{
+        console.log(err);
+      });
+      
     }
 
     )
@@ -30,17 +43,18 @@ export default class App extends React.Component {
     }
 
     );
+    
   }
 
   updateText(event) {
     //    console.log(this.state);
     //    alert("text box: " + this.state.todo);
-    this.aTodos.push(this.state.todo);
-    let taskID = Math.floor(Math.random() * 1000);
+    let taskID = Math.floor(new Date() / 1000);
     firebase.database().ref('tasks/' + taskID).set({
       name: this.state.todo
+    }).then(()=>{
+      this.getFromFirebase();
     });
-    this.setState({ todo: "" });
   }
 
   render() {
@@ -50,10 +64,9 @@ export default class App extends React.Component {
         <Text>Changes you make will automatically reload.</Text>
         <Text>Shake your phone to open the developer menu.</Text>
         {
-          Object.keys(this.oTodos).map((key, i) => {
-            return (<Text key={i}>{this.oTodos[key]}</Text>)
-          })
-
+            Object.keys(this.oTodos).map((key, i) => {
+              return (<Text key={i}>{this.oTodos[key].name}</Text>)
+            })
         }
         <TextInput
           ref='todo'
@@ -63,6 +76,7 @@ export default class App extends React.Component {
           onChangeText={(text) => this.setState({ todo: text })}
           onSubmitEditing={() => this.updateText()}
           autoFocus={true}
+          blurOnSubmit={false}
         />
       </View>
     );
