@@ -23,7 +23,7 @@ export default class App extends React.Component {
   }
 
   getFromFirebase() {
-    fetch("https://rnhprog81102018.firebaseio.com/tasks.json")
+    fetch(config.databaseURL + "/tasks.json")
     .then((oData) =>{
       oData.json().then((data) => {
         if(data){
@@ -60,17 +60,9 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Rich, open up src/App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-        {
-            Object.keys(this.oTodos).map((key) => {
-              return (<Text key={key}>{this.oTodos[key].name}</Text>)
-            })
-        }
         <TextInput
           ref='todo'
-          style={{ height: 40 }}
+          style={styles.currentTodo}
           placeholder="Type your text here!"
           value={this.state.todo}
           onChangeText={(text) => this.setState({ todo: text })}
@@ -78,6 +70,14 @@ export default class App extends React.Component {
           autoFocus={true}
           blurOnSubmit={false}
         />
+        <Text>Type your todo above</Text>
+        <View style={styles.todos}>
+        {
+            Object.keys(this.oTodos).reverse().map((key) => {
+              return (<Text key={key}>{this.oTodos[key].name}</Text>)
+            })
+        }
+        </View>
       </View>
     );
   }
@@ -87,7 +87,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: "90vw",
+    margin: "auto"
   },
+  currentTodo:{
+    position: 'relative',
+    top: 0,
+    color: 'red',
+    height: 40
+  },
+  todos: {
+    "margin-top": "1em",
+  }
 });
