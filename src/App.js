@@ -1,7 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TextInput, YellowBox } from 'react-native';
 import firebase from 'firebase/app';
-import database from 'firebase/database';
+import 'firebase/database';
+
+import _ from 'lodash';
+
+
+
+YellowBox.ignoreWarnings(['Setting a timer']);
+const _console = _.clone(console);
+console.warn = message => {
+  if (message.indexOf('Setting a timer') <= -1) {
+    _console.warn(message);
+  }
+};
+
 
 // Initialize Firebase
 var config = {
@@ -24,26 +37,26 @@ export default class App extends React.Component {
 
   getFromFirebase() {
     fetch(config.databaseURL + "/tasks.json")
-    .then((oData) =>{
-      oData.json().then((data) => {
-        if(data){
-          this.oTodos = data;
+      .then((oData) => {
+        oData.json().then((data) => {
+          if (data) {
+            this.oTodos = data;
 
-        }
-        this.setState({ todo: "" });
-      }).catch((err) =>{
+          }
+          this.setState({ todo: "" });
+        }).catch((err) => {
+          console.log(err);
+        });
+
+      }
+
+      )
+      .catch((err) => {
         console.log(err);
-      });
-      
-    }
+      }
 
-    )
-    .catch((err) => {
-      console.log(err);
-    }
+      );
 
-    );
-    
   }
 
   updateText(event) {
@@ -52,7 +65,7 @@ export default class App extends React.Component {
     let taskID = Math.floor(new Date() / 1000);
     firebase.database().ref('tasks/' + taskID).set({
       name: this.state.todo
-    }).then(()=>{
+    }).then(() => {
       this.getFromFirebase();
     });
   }
@@ -72,11 +85,11 @@ export default class App extends React.Component {
         />
         <Text>Type your todo above</Text>
         <View style={styles.todos}>
-        {
+          {
             Object.keys(this.oTodos).reverse().map((key) => {
               return (<Text key={key}>{this.oTodos[key].name}</Text>)
             })
-        }
+          }
         </View>
       </View>
     );
@@ -87,16 +100,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    width: "90vw",
+    width: "90%",
     margin: "auto"
   },
-  currentTodo:{
-    position: 'relative',
-    top: 0,
-    color: 'red',
+  currentTodo: {
+    marginTop: 20,
     height: 40
   },
   todos: {
-    "margin-top": "1em",
+    "marginTop": 20,
   }
 });
