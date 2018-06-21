@@ -18,12 +18,12 @@ console.warn = message => {
 
 // Initialize Firebase
 var config = {
-  apiKey: "AIzaSyBPxZ86IT1COx9jsrZsQ_twY1xP6yOWg-c",
-  authDomain: "rnhprog81102018.firebaseapp.com",
-  databaseURL: "https://rnhprog81102018.firebaseio.com",
-  projectId: "rnhprog81102018",
-  storageBucket: "rnhprog81102018.appspot.com",
-  messagingSenderId: "120108595303"
+  apiKey: "yours",
+  authDomain: "yours",
+  databaseURL: "yours",
+  projectId: "yours",
+  storageBucket: "yours",
+  messagingSenderId: "yours"
 };
 firebase.initializeApp(config);
 
