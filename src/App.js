@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, YellowBox } from 'react-native';
+import { StyleSheet, Text, View, TextInput, YellowBox, TouchableHighlight } from 'react-native';
+import SVGImage from 'react-native-svg-image';
 import firebase from 'firebase/app';
 import 'firebase/database';
 
@@ -17,14 +18,7 @@ console.warn = message => {
 
 
 // Initialize Firebase
-var config = {
-  apiKey: "yours",
-  authDomain: "yours",
-  databaseURL: "yours",
-  projectId: "yours",
-  storageBucket: "yours",
-  messagingSenderId: "yours"
-};
+import config from '../config.json';
 firebase.initializeApp(config);
 
 export default class App extends React.Component {
@@ -59,6 +53,10 @@ export default class App extends React.Component {
 
   }
 
+  onTaskCompletion() {
+    alert("clicked");
+  }
+
   updateText(event) {
     //    console.log(this.state);
     //    alert("text box: " + this.state.todo);
@@ -87,7 +85,15 @@ export default class App extends React.Component {
         <View style={styles.todos}>
           {
             Object.keys(this.oTodos).reverse().map((key) => {
-              return (<Text key={key}>{this.oTodos[key].name}</Text>)
+              return (<View key={key} style={styles.row}>
+                <TouchableHighlight onPress={this.onTaskCompletion}>
+                  <SVGImage style={styles.check} source={require('../images/baseline-done-24px.svg')} />
+                </TouchableHighlight>
+                <TouchableHighlight onPress={this.onTaskCompletion}>
+                  <SVGImage style={styles.check} source={require('../images/baseline-delete-24px.svg')} />
+                </TouchableHighlight>
+                <Text>{this.oTodos[key].name}</Text>
+              </View>);
             })
           }
         </View>
@@ -108,6 +114,15 @@ const styles = StyleSheet.create({
     height: 40
   },
   todos: {
-    "marginTop": 20,
+    marginTop: 20,
+  },
+  row: {
+    flexDirection: 'row',
+    alignSelf: 'flex-start'
+  },
+  check: {
+    height: 20,
+    width: 20
   }
+
 });
