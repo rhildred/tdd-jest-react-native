@@ -1,9 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, YellowBox, TouchableHighlight } from 'react-native';
-import SVGImage from 'react-native-svg-image';
+import { StyleSheet, Text, View, TextInput, YellowBox, TouchableHighlight, Image } from 'react-native';
 import firebase from 'firebase/app';
 import 'firebase/database';
-
 import _ from 'lodash';
 
 
@@ -25,7 +23,7 @@ export default class App extends React.Component {
   oTodos = {};
   constructor(props) {
     super(props);
-    this.state = { todo: '' };
+    this.state = { todo: '', date:"2016-05-15" };
     this.getFromFirebase();
   }
 
@@ -53,9 +51,18 @@ export default class App extends React.Component {
 
   }
 
-  onTaskCompletion() {
-    alert("clicked");
+  onTaskCompletion(id) {
+    console.log(this.oTodos[id]);
+    alert("clicked complete " + id);
   }
+
+  onTaskDeletion(id) {
+    console.log(this.oTodos[id]);
+    firebase.database().ref('tasks/' + id).remove().then(() =>{
+      this.getFromFirebase();
+    });
+  }
+
 
   updateText(event) {
     //    console.log(this.state);
@@ -70,32 +77,34 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <TextInput
-          ref='todo'
-          style={styles.currentTodo}
-          placeholder="Type your text here!"
-          value={this.state.todo}
-          onChangeText={(text) => this.setState({ todo: text })}
-          onSubmitEditing={() => this.updateText()}
-          autoFocus={true}
-          blurOnSubmit={false}
-        />
-        <Text>Type your todo above</Text>
-        <View style={styles.todos}>
-          {
-            Object.keys(this.oTodos).reverse().map((key) => {
-              return (<View key={key} style={styles.row}>
-                <TouchableHighlight onPress={this.onTaskCompletion}>
-                  <SVGImage style={styles.check} source={require('../images/baseline-done-24px.svg')} />
-                </TouchableHighlight>
-                <TouchableHighlight onPress={this.onTaskCompletion}>
-                  <SVGImage style={styles.check} source={require('../images/baseline-delete-24px.svg')} />
-                </TouchableHighlight>
-                <Text>{this.oTodos[key].name}</Text>
-              </View>);
-            })
-          }
+      <View>
+        <View style={styles.container}>
+          <TextInput
+            ref='todo'
+            style={styles.currentTodo}
+            placeholder="Type your text here!"
+            value={this.state.todo}
+            onChangeText={(text) => this.setState({ todo: text })}
+            onSubmitEditing={() => this.updateText()}
+            autoFocus={true}
+            blurOnSubmit={false}
+          />
+          <Text>Type your todo above</Text>
+          <View style={styles.todos}>
+            {
+              Object.keys(this.oTodos).reverse().map((key) => {
+                return (<View key={key} style={styles.row}>
+                  <TouchableHighlight onPress={() => this.onTaskCompletion(key)}>
+                    <Image style={styles.check} source={require('../images/2x/baseline_done_black_18dp.png')} />
+                  </TouchableHighlight>
+                  <TouchableHighlight onPress={() => this.onTaskDeletion(key)}>
+                    <Image style={styles.check} source={require('../images/2x/baseline_delete_black_18dp.png')} />
+                  </TouchableHighlight>
+                  <Text>{this.oTodos[key].name}</Text>
+                </View>);
+              })
+            }
+          </View>
         </View>
       </View>
     );
