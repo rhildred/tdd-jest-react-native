@@ -17,4 +17,4 @@
 
 ### wrapped in a normal android app
 
-![the expo setup](https://rhildred.github.io/react-native-todo/READMEImages/IMG_20180612_105337772.jpg "the expo setup")
+![the expo setup](https://rhildred.github.io/react-native-todo/READMEImages/IMG_20180612_105349178.jpg "the expo setup")
