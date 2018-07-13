@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 
 it("works with async", () =>{
     expect.assertions(1);
-    fetch('https://rnhprog81102018.firebaseio.com/test.json')
+    return fetch('https://rnhprog81102018.firebaseio.com/test.json')
     .then((oData) => {
         oData.json().then((data) => {
           if (data) {
